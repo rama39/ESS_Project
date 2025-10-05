@@ -21,6 +21,15 @@ Feature: importação de alunos
     And  o sistema tem um aluno "Maria" de CPF 456
     And  eu vejo uma mensagem "Erro na importação (CPF de 1 aluno repetido)"
 
+  Scenario: importação de planilha (CPF inválido)
+    Given o sistema tem um aluno "João"  de CPF 123
+    And   o sistema tem um aluno "Maria" de CPF 456
+    And  a planilha tem um aluno "Cris"  de CPF "7-8-9"
+    When eu tento importar a planilha
+    Then o sistema tem um aluno "João"  de CPF 123
+    And  o sistema tem um aluno "Maria" de CPF 456
+    And  eu vejo uma mensagem "Erro na importação (CPF de 1 aluno inválido)"
+
   Scenario: importação de planilha (planilha vazia)
     Given o sistema tem um aluno "João"  de CPF 123
     And   o sistema tem um aluno "Maria" de CPF 456
