@@ -38,3 +38,4 @@ Feature: importação de alunos
     Then o sistema tem um aluno "João"  de CPF 123
     And  o sistema tem um aluno "Maria" de CPF 456
     And  eu vejo uma mensagem "Planilha vazia"
+    And  a planilha não tem alunos
