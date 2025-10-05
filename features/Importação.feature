@@ -43,7 +43,7 @@ Feature: importação de alunos
   Scenario: importação de planilha (um aluno com nome inválido [vazio])
     Given o sistema tem um aluno "João"  de CPF 123
     And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha tem um aluno ""  de CPF 789
+    And  a planilha tem um aluno " "  de CPF 789
     When eu tento importar a planilha
     Then o sistema tem um aluno "João"  de CPF 123
     And  o sistema tem um aluno "Maria" de CPF 456
