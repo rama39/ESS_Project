@@ -38,3 +38,12 @@ Feature: importação de alunos
     Then o sistema tem um aluno "João"  de CPF 123
     And  o sistema tem um aluno "Maria" de CPF 456
     And  eu vejo uma mensagem "Planilha vazia"
+
+  Scenario: importação de planilha (um aluno com nome inválido)
+    Given o sistema tem um aluno "João"  de CPF 123
+    And   o sistema tem um aluno "Maria" de CPF 456
+    And  a planilha tem um aluno ""  de CPF 123
+    When eu tento importar a planilha
+    Then o sistema tem um aluno "João"  de CPF 123
+    And  o sistema tem um aluno "Maria" de CPF 456
+    And  eu vejo uma mensagem "Erro na importação (nome de 1 aluno inválido [nome vazio])"
