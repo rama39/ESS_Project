@@ -1,34 +1,34 @@
-Feature: importação de alunos
+Feature: importing students
   As a professor
-  I want to lançar dados de alunos de uma planilha no sistema
-  so that I can inserir informações com mais facilidade
+  I want to upload student data from a spreadsheet to the system
+  so that I can input information more easily
 
-  Scenario: importação de planilha
-    Given o sistema tem um aluno "João"  de CPF 123
-    And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha tem um aluno "Cris"  de CPF 789
-    When eu tento importar a planilha
-    Then o sistema tem um aluno "João"  de CPF 123
-    And  o sistema tem um aluno "Maria" de CPF 456
-    And  o sistema tem um aluno "Cris"  de CPF 789
+  Scenario: importing spreadsheet (successfull)
+    Given    the system has a student of name "João"  and CPF 123
+    And      the system has a student of name "Maria" and CPF 456
+    And the spreadsheet has a student of name "Cris"  and CPF 789
+    When I try to import the spreadsheet
+    Then the system has a student of name "João"  and CPF 123
+    And  the system has a student of name "Maria" and CPF 456
+    And  the system has a student of name "Cris"  and CPF 789
 
-  Scenario: importação de planilha (um aluno que já existe)
-    Given o sistema tem um aluno "João"  de CPF 123
-    And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha tem um aluno "Cris"  de CPF 123
-    When eu tento importar a planilha
-    Then o sistema tem um aluno "João"  de CPF 123
-    And  o sistema tem um aluno "Maria" de CPF 456
-    And  eu vejo uma mensagem "Erro na importação (CPF de 1 aluno repetido)"
+  Scenario: importing spreadsheet (existing student)
+    Given    the system has a student of name "João"  and CPF 123
+    And      the system has a student of name "Maria" and CPF 456
+    And the spreadsheet has a student of name "Cris"  and CPF 123
+    When I try to import the spreadsheet
+    Then the system has a student of name "João"  and CPF 123
+    And  the system has a student of name "Maria" and CPF 456
+    And  I see the message "Erro na importação (CPF de 1 aluno repetido)"
 
-  Scenario: importação de planilha (CPF inválido)
-    Given o sistema tem um aluno "João"  de CPF 123
-    And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha tem um aluno "Cris"  de CPF "789"
-    When eu tento importar a planilha
-    Then o sistema tem um aluno "João"  de CPF 123
-    And  o sistema tem um aluno "Maria" de CPF 456
-    And  eu vejo uma mensagem "Erro na importação (CPF de 1 aluno inválido)"
+  Scenario: importing spreadsheet (invalid CPF)
+    Given    the system has a student of name "João"  and CPF 123
+    And      the system has a student of name "Maria" and CPF 456
+    And the spreadsheet has a student of name "Cris"  and CPF "789"
+    When I try to import the spreadsheet
+    Then the system has a student of name "João"  and CPF 123
+    And  the system has a student of name "Maria" and CPF 456
+    And  I see the message "Erro na importação (CPF de 1 aluno inválido)"
 
   Scenario: importação de planilha (planilha vazia)
     Given o sistema tem um aluno "João"  de CPF 123
