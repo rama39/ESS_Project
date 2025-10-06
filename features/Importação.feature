@@ -56,7 +56,7 @@ Feature: importação de alunos
     When eu tento importar a planilha
     Then o sistema tem um aluno "João"  de CPF 123
     And  o sistema tem um aluno "Maria" de CPF 456
-    And  eu vejo uma mensagem "Erro na importação (nome de 1 aluno inválido [nome muito longo, máximo 256 caracteres])"
+    And  eu vejo uma mensagem "Erro na importação (nome de 1 aluno inválido [nome muito longo, máximo 256])"
 
   Scenario: importação de planilha (um aluno com nome inválido [tipo de valor])
     Given o sistema tem um aluno "João"  de CPF 123
