@@ -1,68 +1,67 @@
-Feature: importing students
+Feature: importing student data
   As a professor
-  I want to upload student data from a spreadsheet to the system
+  I want to upload student data from a spreadsheet to a class I have access to
   so that I can input information more easily
 
   Scenario: importing spreadsheet (successfull)
-    Given    the system has a student of name "João"  and CPF 123
-    And      the system has a student of name "Maria" and CPF 456
-    And the spreadsheet has a student of name "Cris"  and CPF 789
-    When I try to import the spreadsheet
-    Then the system has a student of name "João"  and CPF 123
-    And  the system has a student of name "Maria" and CPF 456
-    And  the system has a student of name "Cris"  and CPF 789
+    Given I am logged in as a professor who has access to the class "ESS 2025.2"
+    And   the class "ESS 2025.2" has a student of name, login, discord, github: 
+            "Maria Andrade da Silva" "MAS3" "Mandrade" "mas3_"
+    And   the spreadsheet has a student of name, login, discord, github: 
+            "Cris de Trindade Rocha" "CTR" "Crizin" "Cris___"
+    When I try to import the spreadsheet into the class "ESS 2025.2"
+    Then  the class "ESS 2025.2" has a student of name, login, discord, github: 
+            "Maria Andrade da Silva" "MAS3" "Mandrade" "mas3_"
+    And   the class "ESS 2025.2" has a student of name, login, discord, github: 
+            "Cris de Trindade Rocha" "CTR" "Crizin" "Cris___"
+    And   I see the message "Importação bem sucedida!"
 
   Scenario: importing spreadsheet (existing student)
-    Given    the system has a student of name "João"  and CPF 123
-    And      the system has a student of name "Maria" and CPF 456
-    And the spreadsheet has a student of name "Cris"  and CPF 123
-    When I try to import the spreadsheet
-    Then the system has a student of name "João"  and CPF 123
-    And  the system has a student of name "Maria" and CPF 456
-    And  I see the message "Erro na importação (CPF de 1 aluno repetido)"
+    Given I am logged in as a professor who has access to the class "ESS 2025.2"
+    And   the class "ESS 2025.2" has a student of login "JPMS"
+    And   the class "ESS 2025.2" has a student of login "MAS3"
+    And   the spreadsheet has a student of login "MAS3"
+    When I try to import the spreadsheet into the class "ESS 2025.2"
+    Then the class "ESS 2025.2" has a student of login "JPMS"
+    And  the class "ESS 2025.2" has a student of login "MAS3"
+    And  I see the message "Erro na importação (login de 1 aluno repetido)"
 
-  Scenario: importing spreadsheet (invalid CPF)
-    Given    the system has a student of name "João"  and CPF 123
-    And      the system has a student of name "Maria" and CPF 456
-    And the spreadsheet has a student of name "Cris"  and CPF "789"
-    When I try to import the spreadsheet
-    Then the system has a student of name "João"  and CPF 123
-    And  the system has a student of name "Maria" and CPF 456
-    And  I see the message "Erro na importação (CPF de 1 aluno inválido)"
+  Scenario: importing spreadsheet (empty spreadsheet)
+    Given I am logged in as a professor who has access to the class "ESS 2025.2"
+    And   the class "ESS 2025.2" has a student of login "JPMS"
+    And   the class "ESS 2025.2" has a student of login "MAS3"
+    And   the spreadsheet has no students
+    When I try to import the spreadsheet into the class "ESS 2025.2"
+    Then the class "ESS 2025.2" has a student of login "JPMS"
+    And  the class "ESS 2025.2" has a student of login "MAS3"
+    And  I see the message "Erro na importação (planilha vazia)"
 
-  Scenario: importação de planilha (planilha vazia)
-    Given o sistema tem um aluno "João"  de CPF 123
-    And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha não tem alunos
-    When eu tento importar a planilha
-    Then o sistema tem um aluno "João"  de CPF 123
-    And  o sistema tem um aluno "Maria" de CPF 456
-    And  eu vejo uma mensagem "Planilha vazia"
-    And  a planilha não tem alunos
+  Scenario: importing spreadsheet (one student has an invalid login [empty])
+    Given I am logged in as a professor who has access to the class "ESS 2025.2"
+    And   the class "ESS 2025.2" has a student of login "JPMS"
+    And   the class "ESS 2025.2" has a student of login "MAS3"
+    And   the spreadsheet has a student of login " "
+    When I try to import the spreadsheet into the class "ESS 2025.2"
+    Then the class "ESS 2025.2" has a student of login "JPMS"
+    And  the class "ESS 2025.2" has a student of login "MAS3"
+    And  I see the message "Erro na importação (login de 1 aluno inválido [login vazio])"
 
-  Scenario: importação de planilha (um aluno com nome inválido [vazio])
-    Given o sistema tem um aluno "João"  de CPF 123
-    And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha tem um aluno " "  de CPF 789
-    When eu tento importar a planilha
-    Then o sistema tem um aluno "João"  de CPF 123
-    And  o sistema tem um aluno "Maria" de CPF 456
-    And  eu vejo uma mensagem "Erro na importação (nome de 1 aluno inválido [nome vazio])"
+  Scenario: importing spreadsheet (one student has an invalid login [too long])
+    Given I am logged in as a professor who has access to the class "ESS 2025.2"
+    And   the class "ESS 2025.2" has a student of login "JPMS"
+    And   the class "ESS 2025.2" has a student of login "MAS3"
+    And   the spreadsheet has a student whose login has 17 characters
+    When I try to import the spreadsheet into the class "ESS 2025.2"
+    Then the class "ESS 2025.2" has a student of login "JPMS"
+    And  the class "ESS 2025.2" has a student of login "MAS3"
+    And  I see the message "Erro na importação (login de 1 aluno inválido [login muito longo, máximo 16])"
 
-  Scenario: importação de planilha (um aluno com nome inválido [muito longo])
-    Given o sistema tem um aluno "João"  de CPF 123
-    And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha tem um aluno com nome de 257 caracteres e CPF 789
-    When eu tento importar a planilha
-    Then o sistema tem um aluno "João"  de CPF 123
-    And  o sistema tem um aluno "Maria" de CPF 456
-    And  eu vejo uma mensagem "Erro na importação (nome de 1 aluno inválido [nome muito longo, máximo 256])"
-
-  Scenario: importação de planilha (um aluno com nome inválido [tipo de valor])
-    Given o sistema tem um aluno "João"  de CPF 123
-    And   o sistema tem um aluno "Maria" de CPF 456
-    And  a planilha tem um aluno 200 e CPF 789
-    When eu tento importar a planilha
-    Then o sistema tem um aluno "João"  de CPF 123
-    And  o sistema tem um aluno "Maria" de CPF 456
-    And  eu vejo uma mensagem "Erro na importação (nome de 1 aluno inválido [tipo de valor])"
+  Scenario: importing spreadsheet (one student has an invalid login [type error])
+    Given I am logged in as a professor who has access to the class "ESS 2025.2"
+    And   the class "ESS 2025.2" has a student of login "JPMS"
+    And   the class "ESS 2025.2" has a student of login "MAS3"
+    And   the spreadsheet has a student of login 7
+    When I try to import the spreadsheet into the class "ESS 2025.2"
+    Then the class "ESS 2025.2" has a student of login "JPMS"
+    And  the class "ESS 2025.2" has a student of login "MAS3"
+    And  I see the message "Erro na importação (login de 1 aluno inválido [tipo de valor, esperava string])"
